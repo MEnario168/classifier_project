@@ -13,17 +13,23 @@ $requiredFiles = @(
     ".gitignore",
     "config.local.env.example",
     "VERIFICATION.md",
-    "assets\.gitkeep",
     "firebase\firestore.rules",
     "firebase\firestore-schema.md",
-    "kodular\KODULAR-BLOCKS.md",
-    "kodular\sample-labels.txt",
-    "kodular\sample-firestore-payload.json",
     "apps-script\firestore-to-sheets.gs",
     "apps-script\README.md",
     "looker-studio\DASHBOARD-SPEC.md",
     "scripts\test-firestore-post.ps1",
-    "scripts\validate-setup.ps1"
+    "scripts\validate-setup.ps1",
+    "web\package.json",
+    "web\app\page.tsx",
+    "web\app\layout.tsx",
+    "web\lib\classifier.ts",
+    "web\lib\firebase.ts",
+    "web\lib\logger.ts",
+    "web\lib\user-id.ts",
+    "web\.env.local.example",
+    "web\README.md",
+    "web\public\model\README.md"
 )
 
 $passed = 0
@@ -52,13 +58,21 @@ if (Test-Path $envPath) {
     Write-Host "[INFO] config.local.env not found - copy from config.local.env.example to enable smoke test" -ForegroundColor Yellow
 }
 
-# Optional: check TM model assets
-$modelPath = Join-Path $projectRoot "assets\model.tflite"
-$labelsPath = Join-Path $projectRoot "assets\labels.txt"
-if ((Test-Path $modelPath) -and (Test-Path $labelsPath)) {
-    Write-Host "[INFO] Teachable Machine assets found in assets/" -ForegroundColor Cyan
+# Optional: check web env
+$webEnvPath = Join-Path $projectRoot "web\.env.local"
+if (Test-Path $webEnvPath) {
+    Write-Host "[INFO] web/.env.local exists - web app Firebase config ready" -ForegroundColor Cyan
 } else {
-    Write-Host "[INFO] TM model not yet in assets/ - export from Teachable Machine when ready" -ForegroundColor Yellow
+    Write-Host "[INFO] web/.env.local not found - copy from web/.env.local.example" -ForegroundColor Yellow
+}
+
+# Optional: check TM model assets
+$modelPath = Join-Path $projectRoot "web\public\model\model.json"
+$metadataPath = Join-Path $projectRoot "web\public\model\metadata.json"
+if ((Test-Path $modelPath) -and (Test-Path $metadataPath)) {
+    Write-Host "[INFO] Teachable Machine TensorFlow.js model found in web/public/model/" -ForegroundColor Cyan
+} else {
+    Write-Host "[INFO] TM model not yet in web/public/model/ - export TensorFlow.js from Teachable Machine" -ForegroundColor Yellow
 }
 
 Write-Host ""

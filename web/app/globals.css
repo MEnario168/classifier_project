@@ -1,0 +1,147 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+button {
+  font: inherit;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.header p {
+  margin: 0.35rem 0 0;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+.status {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: #1e293b;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.status.error {
+  background: #451a1a;
+  color: #fecaca;
+}
+
+.videoWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #020617;
+  border: 1px solid #334155;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.videoPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.classifyButton {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 1rem 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: #22c55e;
+  color: #052e16;
+  cursor: pointer;
+}
+
+.classifyButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.resultCard {
+  padding: 1rem;
+  border-radius: 1rem;
+  background: #1e293b;
+}
+
+.resultLabel {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.resultValue {
+  margin: 0.35rem 0 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.confidence {
+  margin: 0.35rem 0 0;
+  color: #cbd5e1;
+}
+
+.predictions {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.predictionRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+}
+
+.footer {
+  margin-top: auto;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #64748b;
+  padding-bottom: 0.5rem;
+}

@@ -18,9 +18,8 @@ Expected output: all checks pass.
 |------|--------|-------|
 | 1.1 | 3 classes created (Plastic, Paper, Background) with 50+ samples each | ☐ |
 | 1.2 | Model trained; Preview accuracy >95% | ☐ |
-| 1.3 | Exported as TensorFlow Lite (Floating Point or Quantized) | ☐ |
-| 1.4 | `model.tflite` and `labels.txt` copied to `assets/` | ☐ |
-| 1.5 | Same files uploaded to Kodular Assets manager | ☐ |
+| 1.3 | Exported as **TensorFlow.js** (not TFLite) | ☐ |
+| 1.4 | `model.json`, `metadata.json`, weights copied to `web/public/model/` | ☐ |
 
 ## Phase 2 — Firebase / Firestore
 
@@ -29,7 +28,7 @@ Expected output: all checks pass.
 | 2.1 | Firebase project created | ☐ |
 | 2.2 | Firestore enabled in Test mode | ☐ |
 | 2.3 | Security rules deployed from `firebase/firestore.rules` | ☐ |
-| 2.4 | `config.local.env` filled with Project ID and Web API Key | ☐ |
+| 2.4 | `web/.env.local` filled with Firebase web app config | ☐ |
 | 2.5 | Smoke test passes: `.\scripts\test-firestore-post.ps1` | ☐ |
 | 2.6 | Document visible in Firebase Console → Firestore → `smart_sorter_logs` | ☐ |
 
@@ -42,18 +41,19 @@ copy config.local.env.example config.local.env
 .\scripts\test-firestore-post.ps1
 ```
 
-## Phase 3 — Kodular app
+## Phase 3 — Web app (Vercel)
 
 | Step | Action | Pass? |
 |------|--------|-------|
-| 3.1 | All components added per `kodular/KODULAR-BLOCKS.md` | ☐ |
-| 3.2 | TFLite extension installed and configured | ☐ |
-| 3.3 | Firebase Project ID and API Key set in blocks | ☐ |
-| 3.4 | APK built and installed on phone | ☐ |
-| 3.5 | Camera permission granted | ☐ |
-| 3.6 | CLASSIFY → shows Plastic/Paper/Background with confidence | ☐ |
-| 3.7 | Status shows "Logged successfully" after classify | ☐ |
-| 3.8 | New document in Firestore with all 4 fields | ☐ |
+| 3.1 | `cd web && npm install && npm run dev` works locally | ☐ |
+| 3.2 | Camera preview and CLASSIFY work in browser | ☐ |
+| 3.3 | Repo pushed to GitHub | ☐ |
+| 3.4 | Vercel project imported with Root Directory = `web` | ☐ |
+| 3.5 | `NEXT_PUBLIC_FIREBASE_*` env vars set on Vercel | ☐ |
+| 3.6 | Vercel URL opens on phone; camera permission granted | ☐ |
+| 3.7 | CLASSIFY shows Plastic/Paper/Background with confidence | ☐ |
+| 3.8 | Status shows "Logged successfully" after classify | ☐ |
+| 3.9 | New document in Firestore with all 4 fields | ☐ |
 
 ## Phase 4 — Sheets + Looker Studio
 
@@ -65,22 +65,23 @@ copy config.local.env.example config.local.env
 | 4.4 | `syncFirestoreToSheet()` populates sheet rows | ☐ |
 | 4.5 | Looker Studio data source connected to sheet | ☐ |
 | 4.6 | Time series, pie chart, and scorecard created | ☐ |
-| 4.7 | Dashboard shows data after Kodular classification + sync | ☐ |
+| 4.7 | Dashboard shows data after web app classification + sync | ☐ |
 | 4.8 | Share link copied for submission | ☐ |
 
 ## Full pipeline test (recommended order)
 
-1. **Train & export** TM model → upload to Kodular
+1. **Train & export** TM model as TensorFlow.js → copy to `web/public/model/`
 2. **Configure Firebase** → deploy rules → run smoke test
-3. **Build Kodular app** → install APK → classify 3+ items (one per class)
-4. **Verify Firestore** — 3+ documents in `smart_sorter_logs`
-5. **Run Apps Script sync** — sheet has 3+ rows
-6. **Open Looker Studio** — charts reflect the data
-7. **Share dashboard link**
+3. **Run web app locally** → classify 3+ items (one per class)
+4. **Deploy to Vercel** → test on phone
+5. **Verify Firestore** — 3+ documents in `smart_sorter_logs`
+6. **Run Apps Script sync** — sheet has 3+ rows
+7. **Open Looker Studio** — charts reflect the data
+8. **Share dashboard link**
 
 ## Timing notes
 
-- Firestore logging: **immediate** after Kodular classify
+- Firestore logging: **immediate** after web app classify
 - Sheet sync: up to **5 minutes** (or run `syncFirestoreToSheet()` manually)
 - Looker refresh: click **Refresh data** or wait ~15 min for cache
 
@@ -88,7 +89,7 @@ copy config.local.env.example config.local.env
 
 Submit these for the lab:
 
-- [ ] Kodular APK (or screenshot of app classifying an item)
+- [ ] Vercel web app URL (or screenshot of phone browser classifying an item)
 - [ ] Firebase Console screenshot showing `smart_sorter_logs` documents
 - [ ] Looker Studio shared dashboard link
 - [ ] (Optional) Google Sheet link showing synced data

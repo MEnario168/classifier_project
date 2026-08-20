@@ -4,7 +4,7 @@
 
 **Name:** `smart_sorter_logs`
 
-Each document represents one successful classification from the Kodular app.
+Each document represents one successful classification from the web app.
 
 ## Fields
 
@@ -90,6 +90,19 @@ firebase deploy --only firestore:rules
 
 1. Firebase Console → Firestore Database → **Data** tab
 2. Confirm collection `smart_sorter_logs` exists
-3. After a Kodular classification, a new document should appear with all four fields
+3. After a web app classification, a new document should appear with all four fields
 
-See also: [`../kodular/sample-firestore-payload.json`](../kodular/sample-firestore-payload.json)
+## Web app write (Firebase SDK)
+
+The Next.js app in `web/` writes documents using the Firebase client SDK:
+
+```typescript
+await addDoc(collection(db, "smart_sorter_logs"), {
+  classification: "Plastic",
+  confidence: 0.98,
+  timestamp: serverTimestamp(),
+  user_id: "device-uuid",
+});
+```
+
+See [`../web/lib/logger.ts`](../web/lib/logger.ts) for the implementation.

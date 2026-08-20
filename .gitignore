@@ -2,8 +2,9 @@
 config.local.env
 .env
 *.key
+web/.env.local
 
-# Teachable Machine export (large binary)
+# Legacy TFLite assets (web app uses TensorFlow.js in web/public/model/)
 assets/model.tflite
 assets/*.zip
 

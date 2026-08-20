@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // WARNING: PUBLIC ACCESS — LAB / TESTING ONLY
+    // Do not use in production. Anyone can read and write all documents.
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+
+// Production reference (not applied by default):
+// match /smart_sorter_logs/{logId} {
+//   allow read: if request.auth != null;
+//   allow create: if request.auth != null
+//     && request.resource.data.keys().hasAll(['classification', 'confidence', 'timestamp', 'user_id']);
+//   allow update, delete: if false;
+// }

@@ -1,0 +1,13 @@
+# Local secrets — never commit
+config.local.env
+.env
+*.key
+
+# Teachable Machine export (large binary)
+assets/model.tflite
+assets/*.zip
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp

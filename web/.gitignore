@@ -6,9 +6,7 @@ out/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.vercel
 
-# Teachable Machine model weights (large binaries)
-public/model/model.json
-public/model/metadata.json
-public/model/weights.bin
-public/model/group1-shard*.bin
+# Model files should be committed or deployed via scripts/deploy-web.ps1
+# If your model is very large (>25 MB), use NEXT_PUBLIC_MODEL_BASE_URL instead.

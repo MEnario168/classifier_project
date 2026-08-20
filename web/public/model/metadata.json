@@ -1,0 +1,10 @@
+{
+  "labels": [
+    "Plastic",
+    "Paper",
+    "Background"
+  ],
+  "imageSize": 224,
+  "placeholder": true,
+  "note": "PLACEHOLDER model for deploy smoke-test. Replace with Teachable Machine TensorFlow.js export for accurate classification."
+}

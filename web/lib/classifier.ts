@@ -36,41 +36,8 @@ function getModelUrls() {
 let modelPromise: Promise<ClassifierModel> | null = null;
 
 async function fetchMetadata(): Promise<ModelMetadata> {
-  const { metadataUrl, base } = getModelUrls();
-
-  // #region agent log
-  fetch("http://127.0.0.1:7695/ingest/0b9b68b6-83e4-4305-b0df-65c4ec3a3070", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ac6c04" },
-    body: JSON.stringify({
-      sessionId: "ac6c04",
-      runId: "model-load",
-      hypothesisId: "H1",
-      location: "classifier.ts:fetchMetadata",
-      message: "Fetching metadata",
-      data: { metadataUrl, modelBase: base },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-
+  const { metadataUrl } = getModelUrls();
   const response = await fetch(metadataUrl);
-
-  // #region agent log
-  fetch("http://127.0.0.1:7695/ingest/0b9b68b6-83e4-4305-b0df-65c4ec3a3070", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ac6c04" },
-    body: JSON.stringify({
-      sessionId: "ac6c04",
-      runId: "model-load",
-      hypothesisId: "H1",
-      location: "classifier.ts:fetchMetadata:response",
-      message: "Metadata fetch result",
-      data: { metadataUrl, ok: response.ok, status: response.status },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
 
   if (!response.ok) {
     throw new Error(
@@ -92,22 +59,6 @@ export function loadClassifierModel(): Promise<ClassifierModel> {
       if (!labels.length) {
         throw new Error("Model metadata.json is missing labels.");
       }
-
-      // #region agent log
-      fetch("http://127.0.0.1:7695/ingest/0b9b68b6-83e4-4305-b0df-65c4ec3a3070", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ac6c04" },
-        body: JSON.stringify({
-          sessionId: "ac6c04",
-          runId: "model-load",
-          hypothesisId: "H3",
-          location: "classifier.ts:loadClassifierModel",
-          message: "Model loaded",
-          data: { modelUrl, labelCount: labels.length, labels },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      // #endregion
 
       return {
         model,

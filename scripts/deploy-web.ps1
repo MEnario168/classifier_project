@@ -48,6 +48,9 @@ Get-ChildItem $modelDir -File | ForEach-Object { Write-Host "  $($_.Name) ($([ma
 Write-Host "`nDeploying to Vercel (smart-sorter project)..."
 Push-Location $webRoot
 try {
+    # Ensure we deploy to smart-sorter (not a wrongly linked "web" project)
+    npx vercel link --project smart-sorter --scope menario168s-projects --yes | Out-Null
+    npx vercel project update smart-sorter --auto-detect root-directory --scope menario168s-projects --non-interactive | Out-Null
     npx vercel deploy --prod --scope menario168s-projects
 } finally {
     Pop-Location

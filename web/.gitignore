@@ -10,3 +10,4 @@ yarn-error.log*
 
 # Model files should be committed or deployed via scripts/deploy-web.ps1
 # If your model is very large (>25 MB), use NEXT_PUBLIC_MODEL_BASE_URL instead.
+.env*

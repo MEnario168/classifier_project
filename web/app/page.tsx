@@ -5,6 +5,8 @@ import { isFirebaseConfigured } from "@/lib/firebase";
 import type { ClassifierModel } from "@/lib/classifier";
 import type { Prediction } from "@/lib/types";
 
+const LOW_CONFIDENCE = 0.55;
+
 type AppStatus =
   | "initializing"
   | "ready"
@@ -122,6 +124,14 @@ export default function HomePage() {
       setPredictions(results);
       setTopClass(top.className);
       setTopConfidence(top.probability);
+
+      if (top.probability < LOW_CONFIDENCE) {
+        setStatus("ready");
+        setStatusMessage(
+          `Low confidence (${formatConfidence(top.probability)}) — move closer or improve lighting, then try again.`
+        );
+        return;
+      }
 
       if (!isFirebaseConfigured()) {
         setStatus("ready");

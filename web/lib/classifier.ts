@@ -14,6 +14,11 @@ export type Prediction = {
 type ModelMetadata = {
   labels?: string[];
   imageSize?: number;
+  placeholder?: boolean;
+  preprocessing?: {
+    normalize?: string;
+    range?: number[];
+  };
 };
 
 function getModelBaseUrl(): string {
@@ -36,41 +41,8 @@ function getModelUrls() {
 let modelPromise: Promise<ClassifierModel> | null = null;
 
 async function fetchMetadata(): Promise<ModelMetadata> {
-  const { metadataUrl, base } = getModelUrls();
-
-  // #region agent log
-  fetch("http://127.0.0.1:7695/ingest/0b9b68b6-83e4-4305-b0df-65c4ec3a3070", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ac6c04" },
-    body: JSON.stringify({
-      sessionId: "ac6c04",
-      runId: "model-load",
-      hypothesisId: "H1",
-      location: "classifier.ts:fetchMetadata",
-      message: "Fetching metadata",
-      data: { metadataUrl, modelBase: base },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-
+  const { metadataUrl } = getModelUrls();
   const response = await fetch(metadataUrl);
-
-  // #region agent log
-  fetch("http://127.0.0.1:7695/ingest/0b9b68b6-83e4-4305-b0df-65c4ec3a3070", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ac6c04" },
-    body: JSON.stringify({
-      sessionId: "ac6c04",
-      runId: "model-load",
-      hypothesisId: "H1",
-      location: "classifier.ts:fetchMetadata:response",
-      message: "Metadata fetch result",
-      data: { metadataUrl, ok: response.ok, status: response.status },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
 
   if (!response.ok) {
     throw new Error(
@@ -79,6 +51,32 @@ async function fetchMetadata(): Promise<ModelMetadata> {
   }
 
   return response.json();
+}
+
+/**
+ * Teachable Machine / MobileNet-style capture:
+ * center-crop to square, resize, normalize to [-1, 1].
+ */
+function captureFrame(
+  video: HTMLVideoElement,
+  imageSize: number
+): tf.Tensor4D {
+  return tf.tidy(() => {
+    const pixels = tf.browser.fromPixels(video);
+    const [height, width] = pixels.shape.slice(0, 2);
+    const cropSize = Math.min(height, width);
+    const beginHeight = Math.floor((height - cropSize) / 2);
+    const beginWidth = Math.floor((width - cropSize) / 2);
+
+    const cropped = pixels.slice(
+      [beginHeight, beginWidth, 0],
+      [cropSize, cropSize, 3]
+    );
+
+    const resized = tf.image.resizeBilinear(cropped, [imageSize, imageSize], true);
+    // Match Teachable Machine / MobileNet: (pixel / 127.5) - 1
+    return resized.toFloat().div(127.5).sub(1).expandDims(0) as tf.Tensor4D;
+  });
 }
 
 export function loadClassifierModel(): Promise<ClassifierModel> {
@@ -93,21 +91,11 @@ export function loadClassifierModel(): Promise<ClassifierModel> {
         throw new Error("Model metadata.json is missing labels.");
       }
 
-      // #region agent log
-      fetch("http://127.0.0.1:7695/ingest/0b9b68b6-83e4-4305-b0df-65c4ec3a3070", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "ac6c04" },
-        body: JSON.stringify({
-          sessionId: "ac6c04",
-          runId: "model-load",
-          hypothesisId: "H3",
-          location: "classifier.ts:loadClassifierModel",
-          message: "Model loaded",
-          data: { modelUrl, labelCount: labels.length, labels },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      // #endregion
+      if (metadata.placeholder) {
+        console.warn(
+          "Loaded placeholder model — predictions will be inaccurate until a trained model is deployed."
+        );
+      }
 
       return {
         model,
@@ -127,13 +115,7 @@ export async function predictFromVideo(
   const { model, labels, imageSize } = classifier;
 
   const probabilities = tf.tidy(() => {
-    const input = tf.browser
-      .fromPixels(video)
-      .resizeNearestNeighbor([imageSize, imageSize])
-      .toFloat()
-      .div(255)
-      .expandDims(0);
-
+    const input = captureFrame(video, imageSize);
     const output = model.predict(input);
 
     if (Array.isArray(output)) {

@@ -12,14 +12,14 @@ Run from the project root:
 
 Expected output: all checks pass.
 
-## Phase 1 — Teachable Machine
+## Phase 1 — Classification model
 
 | Step | Action | Pass? |
 |------|--------|-------|
-| 1.1 | 3 classes created (Plastic, Paper, Background) with 50+ samples each | ☐ |
-| 1.2 | Model trained; Preview accuracy >95% | ☐ |
-| 1.3 | Exported as **TensorFlow.js** (not TFLite) | ☐ |
-| 1.4 | `model.json`, `metadata.json`, weights copied to `web/public/model/` | ☐ |
+| 1.1 | `web/public/model/metadata.json` lists Plastic, Paper, Background | ☐ |
+| 1.2 | Metadata `placeholder` is `false` (or your own TM model Preview >95%) | ☐ |
+| 1.3 | Model is TensorFlow.js (`model.json` + weights), not TFLite | ☐ |
+| 1.4 | Live `/model/metadata.json` and `/model/model.json` return 200 on deploy | ☐ |
 
 ## Phase 2 — Firebase / Firestore
 

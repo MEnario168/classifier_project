@@ -1,0 +1,49 @@
+{
+  "labels": [
+    "Plastic",
+    "Paper",
+    "Background"
+  ],
+  "imageSize": 224,
+  "tfjsVersion": "4.22.0",
+  "trainedAt": "2026-08-21T15:09:03.312Z",
+  "preprocessing": {
+    "centerCrop": true,
+    "normalize": "pixel / 127.5 - 1",
+    "range": [
+      -1,
+      1
+    ]
+  },
+  "metrics": {
+    "validationAccuracy": 0.975,
+    "validationCorrect": 195,
+    "validationTotal": 200,
+    "confusionMatrix": [
+      [
+        77,
+        2,
+        0
+      ],
+      [
+        1,
+        73,
+        0
+      ],
+      [
+        1,
+        1,
+        45
+      ]
+    ]
+  },
+  "dataset": {
+    "source": "TrashNet (plastic/paper/cardboard) + empty-scene background photos",
+    "labels": [
+      "Plastic",
+      "Paper",
+      "Background"
+    ]
+  },
+  "placeholder": false
+}

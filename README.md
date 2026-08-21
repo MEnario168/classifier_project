@@ -20,16 +20,31 @@ Phone Browser (Next.js on Vercel)
 
 ## Quick start checklist
 
-### Part 1 — Teachable Machine model
+### Part 1 — Classification model
+
+This repo ships a trained TensorFlow.js model in [`web/public/model/`](web/public/model/)
+(MobileNet transfer learning on TrashNet + background scenes; validation ≈97%).
+
+Inference uses Teachable Machine–compatible preprocessing (center crop + normalize to `[-1, 1]`).
+
+**Option A — Use the shipped model (default)**
+
+- [ ] Confirm `/model/metadata.json` loads on your deploy and `placeholder` is `false`
+
+**Option B — Train / replace with Teachable Machine (recommended for your own lab photos)**
 
 - [ ] Open [Teachable Machine](https://teachablemachine.withgoogle.com/) → Image Project → Standard Image Model
-- [ ] Create 3 classes with **50+ samples each**:
+- [ ] Create 3 classes with **50+ samples each** from the same camera/lighting you will use live:
   - `Plastic` — bottle, cup, lid
   - `Paper` — crumpled paper, newspaper, cardboard
   - `Background` — desk, wall, non-target surface
 - [ ] Train model → Preview until **>95%** accuracy
 - [ ] Export → **TensorFlow.js** → Download
-- [ ] Copy `model.json`, `metadata.json`, and weight file(s) into [`web/public/model/`](web/public/model/)
+- [ ] Replace files in [`web/public/model/`](web/public/model/) and redeploy
+
+**Option C — Retrain with the in-repo script**
+
+See [`scripts/train-model/README.md`](scripts/train-model/README.md).
 
 Optional datasets: TrashNet, Recyclable and Household Waste Classification (Kaggle/Roboflow).
 

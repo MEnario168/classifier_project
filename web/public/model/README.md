@@ -1,17 +1,22 @@
-# Teachable Machine model files (TensorFlow.js export)
+# Classification model files (TensorFlow.js)
+
+This folder currently contains a **trained** Plastic / Paper / Background model
+(not a placeholder). You can replace it with your own Teachable Machine export
+or retrain via `scripts/train-model`.
 
 ## Required files in this folder
-
-After training in [Teachable Machine](https://teachablemachine.withgoogle.com/):
-
-1. **Export Model** -> **TensorFlow.js** -> **Download**
-2. Copy these files here:
 
 | File | Purpose |
 |------|---------|
 | `model.json` | Model architecture + weight references |
-| `metadata.json` | Class labels (Plastic, Paper, Background) |
+| `metadata.json` | Class labels + preprocessing notes |
 | `weights.bin` or `group1-shard*.bin` | Model weights |
+
+### Replace with Teachable Machine
+
+1. Train in [Teachable Machine](https://teachablemachine.withgoogle.com/)
+2. **Export Model** -> **TensorFlow.js** -> **Download**
+3. Copy the exported files here (overwrite)
 
 ## Deploy to Vercel
 

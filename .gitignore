@@ -8,6 +8,10 @@ web/.env.local
 assets/model.tflite
 assets/*.zip
 
+# Training workspace (large datasets / node deps)
+scripts/train-model/node_modules/
+/tmp/
+
 # OS / editor
 .DS_Store
 Thumbs.db

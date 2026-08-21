@@ -1,0 +1,13 @@
+{
+  "name": "smart-sorter-train-model",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "train": "node train.mjs"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^4.22.0",
+    "sharp": "^0.33.5"
+  }
+}

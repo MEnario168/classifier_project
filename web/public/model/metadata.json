@@ -38,7 +38,7 @@
     ]
   },
   "dataset": {
-    "source": "TrashNet (plastic/paper/cardboard) + background scenes + non-target materials",
+    "source": "TrashNet (plastic/paper/cardboard) + empty-scene background photos",
     "labels": [
       "Plastic",
       "Paper",

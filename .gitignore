@@ -16,3 +16,6 @@ scripts/train-model/node_modules/
 .DS_Store
 Thumbs.db
 *.swp
+
+# Accidental Next.js build output at repo root
+.next/
